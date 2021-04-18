@@ -44,18 +44,27 @@ class Generale extends REST_Controller
 
 
 	/*
-	 * commite 
+	 * commite
 	 * */
 	public function login_get()
 	{
-		$tabName = $this->input->get('tabname', TRUE);
+
 		$email = $this->input->get('email', TRUE);
 		$pass = $this->input->get('password', TRUE);
-		$data = $this->Model_generale->login($email, $pass, $tabName);
-		if ($data) {
+		$data = $this->Model_generale->login($email, $pass, "admin");
+		$data1 = $this->Model_generale->login($email, $pass, "docteur");
+		$data2 = $this->Model_generale->login($email, $pass, "patient");
+		$data3 = $this->Model_generale->login($email, $pass, "pharmacien");
+		if (!empty($data) || !empty($data1) || !empty($data2) || !empty($data3)) {
+
+			if(!empty($data)){$donne=$data;}
+			else if(!empty($data1)){$donne=$data1;}
+			else if(!empty($data2)){$donne=$data2;}
+			else{$donne=$data3;}
+
 			$res = array(
 				'erorer' => false,
-				'msg' => $data
+				'msg' => $donne
 			);
 			$this->response($res, REST_Controller::HTTP_OK);
 		} else {
